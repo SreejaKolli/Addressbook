@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  become: true
+  become_user: root
+  tasks:
+  - name: Install docker
+    yum: name=docker state=present
+  - name: start docker
+    service: name=docker state=started
+  - name: Build dockerfile
+    command: docker build -t addressbook .
+    args: 
+      chdir: /opt/sreeja
+  - name: change name of the image
+    command: docker tag addressbook sreejakolli/addressbook
+  - name: login to dockerHub
+    command: docker login --username sreejakolli --password First@143
+  - name: push to docker hub
+    command: docker push sreejakolli/addressbook
+  - name: remove the docker image from ACM
+    command: docker rmi sreejakolli/addressbook addressbook tomcat:9
