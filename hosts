@@ -1,0 +1,4 @@
+[DockerSwarm]
+172.31.17.98
+[KubeMaster]
+172.31.40.115 ansible_user=ubuntu
