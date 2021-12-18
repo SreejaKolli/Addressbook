@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: addressbook-deployment
+  labels:
+    app: addressbook
+spec:
+  replicas: 3
+  minReadySeconds: 10 # wait for 45 sec before going to deploy next pod
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1        # max number of pods to run for the deployment
+  selector:
+    matchLabels:
+      app: addressbook
+  template:
+    metadata:
+      name: abpod
+      labels:
+        app: addressbook
+    spec:
+      containers:
+        - name: abimage
+          image: sreejakolli/addressbook:latest
+          resources:
+            limits:
+              cpu: 10m
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: addressbook-svc
+spec:
+  type: NodePort
+  selector:
+    app: addressbook
+  ports:
+   - port: 80
+     targetPort: 80
+---
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: addressbook-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: addressbook-deployment
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
