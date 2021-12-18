@@ -6,7 +6,7 @@ metadata:
   labels:
     app: addressbook
 spec:
-  replicas: 3
+  replicas: 2
   minReadySeconds: 10 # wait for 45 sec before going to deploy next pod
   strategy:
     type: RollingUpdate
