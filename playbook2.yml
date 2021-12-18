@@ -1,0 +1,7 @@
+---
+- hosts: DockerSwarm
+  become: true
+  become_user: root
+  tasks:
+  - name: create a service using the new image
+    command: docker service create --name absvc -p 8484:8080 --replicas 2 sreejakolli/addressbook
