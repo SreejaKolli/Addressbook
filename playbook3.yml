@@ -1,0 +1,7 @@
+---
+- hosts: KubeMaster
+  become: true
+  become_user: root
+  tasks:
+  - name: Create a deployment
+    command: kubectl apply -f https://raw.githubusercontent.com/SreejaKolli/addressbook/master/addressbook.yaml
